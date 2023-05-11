@@ -1,0 +1,18 @@
+<h3>Page dédiée à la ville n°<%= params[:id]%></h3><br>
+<p>
+  <u>Nom :</u> <%= @one_city.name %><br/><br/>
+
+  <p>Voici la liste des potins actuellement disponibles sur notre plateforme pour cette ville :</p><br>
+
+ 
+  <% @one_city.gossips.each do |gossip| %>
+    <div class="card">
+      <h5 class="card-header">Titre du potin :</u> <%= gossip.title %></h5>
+      <div class="card-body">
+        <h5 class="card-title">Auteur : <%= gossip.user.first_name %></h5>
+        <a class="btn btn-primary" <%= link_to "Lire le potin !", gossip_path(gossip.id) %></a>
+      </div>
+    </div>
+    <br>
+  <% end %>
+</p>

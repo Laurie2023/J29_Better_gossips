@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <h3>Page de connexion</h3><br>
+
+    <% if params[:connexion_obligatoire] %>
+      <div class="alert alert-danger" role="alert">
+        Connexion obligatoire pour accèder à cette partie du site !
+      </div><br>
+    <% end %>
+  </head>
+
+  <body>
+    <div>
+      <p>Pour accéder à notre super plateforme de potins, merci de vous connecter avec votre login et votre mot de passe.</p>
+
+      <%= form_with url: sessions_path do |form| %>
+        <%= form.label :title, "Login :" %>
+        <%= form.text_field :login, class:"form-control", placeholder: "Ton login", required: true %>
+        <br /> <br />
+      
+        <%= form.label :password, "Ton mot de passe" %>
+        <%= form.text_field :password, class:"form-control", placeholder: "*******", required: true %>
+        <br /> <br />
+
+        <%= form.submit "Connexion", class: "create" %>
+      <% end %>
+      <br /> <br />
+    </div>
+      
+    <div>
+      <p> Continuer sans se connecter : 
+        <a <%= link_to "Cliquer ici", gossips_path %></a><br>
+        <em> Attention, vous n'aurez pas accès à toutes les fonctions du site </em>
+      </p>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <h3>Page dédiée au gossip n°<%= params[:id]%></h3><br>
+
+    <% if params[:impossible] %>
+      <div class="alert alert-danger" role="alert">
+        Impossible de modifier/supprimer un potin que tu n'as pas écrit !
+      </div><br>
+    <% end %>
+  </head>
+
+  <body>
+    <div>
+      <% if params[:success_gossip_update] %>
+        <div class="alert alert-success" role="alert">
+          Le potin a été actualisé avec succès !
+        </div><br>
+      <% end %>
+
+      <% if params[:success_comment_create] %>
+        <div class="alert alert-success" role="alert">
+          Le commentaire a été créé avec succès !
+        </div><br>
+      <% end %>
+
+      <% if params[:success_comment_update] %>
+        <div class="alert alert-success" role="alert">
+          Le commentaire a été actualisé avec succès !
+        </div><br>
+      <% end %>
+
+      <% if params[:success_comment_delete] %>
+        <div class="alert alert-success" role="alert">
+          Le commentaire a été supprimé avec succès !
+        </div><br>
+      <% end %>
+    </div>
+
+    <div>
+      <p>
+        <u>Auteur :</u> <%= @one_gossip.user.first_name %>  <%= @one_gossip.user.last_name %><br/>
+        <u>Ville :</u> <%= @one_gossip.user.city.name %> <br/><br/>
+
+        <u>Page Auteur :</u> <%= link_to "Cliques ici", user_path(@one_gossip.user.id) %><br/>
+        <u>Page Ville :</u> <%= link_to "Cliques ici", city_path(@one_gossip.user.city_id) %><br/><br/>
+
+
+        <u>Titre du potin :</u> <%= @one_gossip.title %><br/><br/>
+        <u>Date de création :</u> <%= @one_gossip.created_at %><br/>
+        <u>Date de la dernière mise-à-jour :</u> <%= @one_gossip.updated_at %><br/><br/>
+        <u>Potin :</u><br/> <%= @one_gossip.content %><br/><br/>
+      </p>
+    </div>
+
+    <div>
+      <% if current_user.id == Gossip.find(params[:id].to_i).user.id %>
+        <p>
+          <u>Editer le potin :</u> <%= link_to "Cliques ici", edit_gossip_path(params[:id]) %><br/>
+          <%= button_to "Supprimer ce potin", gossip_path(@one_gossip.id), method: :delete %>
+           </tr>
+        </p>
+      <% end %>
+    </div>
+
+    <div>
+      <p>
+        <h3> Tags : </h3>
+        <% if @one_gossip.tags != [] %>
+          <b> Voici tous les tags associés à ce potin : </b><br>
+            <% @one_gossip.tags.each do |tag| %>
+              <%= tag.title %>
+              <br>
+            <% end %>
+          </p>
+        <% else %>
+          <b> Aucun tag pour ce potin à date. </b>
+        <% end %>
+      </p>
+    </div>
+
+    <div>
+      <p>
+        <h3> Likes : </h3>
+
+        <% if current_user.likes.include?(Like.find_by(imageable_type:"Gossip", imageable_id:params[:id], user_id:current_user.id)) == true %>
+
+          <%= button_to "Supprimer un pouce", like_path(Like.find_by(imageable_type:"Gossip", imageable_id:params[:id], user_id:current_user.id).id), method: :delete %>
+
+        <% else %>
+          <%= button_to "Ajouter un pouce", likes_path(imageable_type:"Gossip", imageable_id:params[:id]), method: :post %>
+        <% end %>
+
+        <% if @one_gossip.likes != [] %>
+          <b> Il y a <%= @one_gossip.likes.count %> like(s) pour ce potin ! </b><br>
+        <% else %>
+          <b> Aucun like pour ce potin à date. </b>
+        <% end %>
+      </p>
+    </div>
+
+    <div>
+      <p>
+        <h3> Commentaires : </h3>
+        <% if @one_gossip.comments != [] %>
+          <b> Voici tous les commentaires associés à ce potin : </b>
+            <% @one_gossip.comments.sort_by{|comment| comment.updated_at}.reverse.each do |comment| %>
+              <div class="card">
+                <h5 class="card-header">Auteur :</u> <%= comment.user.first_name %> <%= comment.user.last_name %></h5>
+                <div class="card-body">
+                  <h5 class="card-title">Commentaire : <%= comment.content %></h5>
+                  <u>Editer le commentaire :</u> <%= link_to "Cliques ici", edit_gossip_comment_path(@one_gossip.id,comment.id) %><br></br>
+                  <%= button_to "Supprimer ce commentaire", gossip_comment_path(@one_gossip.id,comment.id), method: :delete %>
+
+                  <div>
+                    <p>
+                      <% if comment.likes != [] %>
+                        <b> Il y a <%= comment.likes.count %> like(s) pour ce commentaire ! </b><br>
+                      <% else %>
+                        <b> Aucun like pour ce commentaire à date. </b>
+                      <% end %>
+                      <% if current_user.likes.include?(Like.find_by(imageable_type:"Comment", imageable_id:comment.id, user_id:current_user.id)) == true %>
+
+                        <%= button_to "Supprimer un pouce sur le com", like_path(Like.find_by(imageable_type:"Comment", imageable_id:comment.id, user_id:current_user.id).id), method: :delete %>
+
+                      <% else %>
+                        <%= button_to "Ajouter un pouce sur le com", likes_path(imageable_type:"Comment", imageable_id:comment.id), method: :post %>
+                      <% end %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <br>
+            <% end %>
+          </p>
+        <% else %>
+          <b> Aucun commentaire pour ce potin à date. </b>
+        <% end %>
+      </p>
+    </div>
+          
+    <div>
+      <h3>Crée un commentaire !</h3><br />
+            
+      <div class="form-page__form">
+        <%= form_with model: [ @one_gossip, @one_gossip.comments.build ] do |form| %>
+        
+          <%= form.label :content %>
+          <%= form.text_area :content %>
+          <br /> <br />
+        
+          <%= form.submit "Enregistrer de ton commentaire !" %> 
+        <% end %>
+      </div><br /> <br />
+    </div>      
+  </body>
+</html>

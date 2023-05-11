@@ -1,0 +1,15 @@
+<h3>Page dédiée à notre ami.e n°<%= params[:id]%></h3><br>
+<p>
+  <u>Prénom :</u> <%= @one_user.first_name %><br/>
+  <u>Nom :</u> <%= @one_user.last_name %><br/><br/>
+  
+  <u>Age :</u> <%= @one_user.age %><br/>
+  <u>Email :</u> <%= @one_user.email %><br/><br/>
+
+  <u>Ville :</u> <%= @one_user.city.name %><br/>
+  <u>Page de la ville :</u> <%= link_to "Cliques ici", city_path(@one_user.city_id) %><br/><br/>
+  
+  <u>Description :</u> <%= @one_user.description %><br/><br/>
+  
+  <u>Date inscription :</u> <%= @one_user.created_at %><br/>
+</p>

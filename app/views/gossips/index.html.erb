@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <% if params[:success] %>
+      <div class="alert alert-success" role="alert">
+        Votre potin a été créé/supprimé avec succès !
+      </div>
+    <% end %>
+
+    <% if params[:success_login] %>
+      <div class="alert alert-success" role="alert">
+        Authentification réussie !
+      </div>
+    <% end %>
+
+    <% if current_user == nil %>
+      <h3>Bienvenu.e sur la liste des potins ! </h3>
+      
+    <% else %>
+      <h3>Bienvenu.e <%= current_user.first_name %> sur la liste des potins ! </h3>
+
+    <% end %>
+    <p>Nous sommes particulière heureux de te retrouver !</p><br>
+  </head>
+
+  <body>
+
+    <p>Pour créer un nouveau potin, <a <%= link_to "cliques ici !", new_gossip_path %></a>
+
+    <p>Voici la liste des potins actuellement disponibles sur notre plateforme :</p><br>
+
+    <% @all_gossips.sort_by{|gossip| gossip.updated_at}.reverse.each do |gossip| %>
+      <div class="card">
+        <h5 class="card-header">Titre du potin :</u> <%= gossip.title %></h5>
+        <div class="card-body">
+          <h5 class="card-title">Auteur : <%= gossip.user.first_name %></h5>
+          <h5 class="card-title">Nombre de commentaires associés à ce potin : <%= gossip.comments.size %></h5>
+          <a class="btn btn-primary" <%= link_to "Lire le potin !", gossip_path(gossip.id) %></a>
+        </div>
+      </div>
+      <br>
+    <% end %>
+
+  </body>
+
+</html>

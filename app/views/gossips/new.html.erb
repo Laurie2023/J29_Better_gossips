@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Créer un potin</title>
+  </head>
+  <body>
+    <h3>Crée un potin !</h3><br />
+    <p>Balance ton potin via le formulaire ci-dessous</p>
+
+    <% if @gossip.errors.any? %>
+      <div class="alert alert-danger" role="alert">
+        <p>Nous n'avons pas réussi à créer le potin pour la (ou les) raison(s) suivante(s) :</p>
+        <ul>
+          <% @gossip.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with model: @gossip do |form| %>
+      <%= form.label :title, "Titre du potin :" %>
+      <%= form.text_field :title, class:"form-control", placeholder: "Super Potin !", required: true %>
+      <br /> <br />
+
+      <%= form.label :content, "Ton potin :" %>
+      <%= form.text_area :content, class:"form-control", placeholder: "La liste des corrections THP est disponible sous l'url ...", required: true %>
+      <br /> <br />
+
+      <%= form.collection_check_boxes :tag_list, Tag.all, :id, :title, checked: Tag.all.map(&:id) do |b| %>
+        <span>
+          <%= b.check_box %>
+          <%= b.label %>
+        </span>
+      <% end %>
+
+      <br /> <br />
+      <%= form.submit "Enregistrer de ton potin !", class: "create" %>
+    <% end %>
+
+  </body>
+</html>

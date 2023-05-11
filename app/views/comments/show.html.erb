@@ -1,0 +1,8 @@
+<h3>Page dédiée au commentaire n°<%= params[:id]%></h3><br> #à revoir pour ajouter le gossip lié
+<p>
+  <u>Prénom :</u> <%= @one_comment.first_name %><br/>
+  <u>Nom :</u> <%= @one_comment.last_name %><br/><br/>
+  <u>Description :</u> <%= @one_comment.description %><br/>
+  <u>Ville :</u> <%= @one_comment.city.name %><br/><br/>
+  <u>Date inscription :</u> <%= @one_comment.created_at %><br/>
+</p>

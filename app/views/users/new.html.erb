@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>Créer un compte utilisateur</title>
+  </head>
+  <body>
+    <h3>Crée un utilisateur !</h3><br />
+    <p>Balance tes informations via le formulaire ci-dessous</p>
+
+    <% if @user.errors.any? %>
+      <div class="alert alert-danger" role="alert">
+        <p>Nous n'avons pas réussi à créer le compte pour la (ou les) raison(s) suivante(s) :</p>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with model: @user do |form| %>
+      <%= form.label :first_name, "Prénom :" %>
+      <%= form.text_field :first_name, placeholder: "Prénom", required: true %>
+      <br />
+
+      <%= form.label :last_name, "Ton nom :" %>
+      <%= form.text_field :last_name, placeholder: "Nom", required: true %>
+      <br /><br />
+
+      <%= form.label :description, "Description:" %>
+      <%= form.text_area :description, class:"form-control", placeholder: "Je m'appelle Bob et j'ai 4 ans. J'adore les dinos !" %>
+      <br /> 
+
+      <%= form.label :email, "Ton email :" %>
+      <%= form.text_field :email, placeholder: "Email@gmail.com", required: true %>
+      <br />
+
+      <%= form.label :age, "Ton âge (ans) :" %>
+      <%= form.text_field :age, placeholder: "45" %>
+      <br /> <br />
+
+      <%= form.label :age, "Ta ville :" %>
+      <%= form.text_field :city, class:"form-control", placeholder: "Toulouse", required:true %>
+      <br /> <br />
+
+      <%= form.label :email, "Ton login :" %>
+      <%= form.text_field :login, placeholder: "Login", required: true %>
+      <br />
+
+      <%= form.label :email, "Ton mot de passe : (min 6 caractères)" %>
+      <%= form.text_field :password, placeholder: "*******", required: true %>
+      <br />
+
+
+      <br /> <br />
+      <%= form.submit "Créer ton compte !", class: "create" %>
+    <% end %>
+
+  </body>
+</html>
